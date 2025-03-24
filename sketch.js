@@ -10,17 +10,15 @@ let yJugador2 = 215;
 let direccionMovimiento = 3;
 
 let tamano_pelota = 20;
-let pelota_rebote = 0; 
-let primer_rebote = false
-let rebote_y_bandera = false
+
 
 let pelota = {
     x: 400,
     y: 250,
     tamano: tamano_pelota,
-    diametro: tamano_pelota / 2,
+    radio: tamano_pelota / 2,
     velocidadX: 1,
-    velocidadY: 1,
+    velocidadY: 3,
     direccionX: 1,
     direccionY: 1
   }
@@ -45,8 +43,6 @@ function draw() {
     yJugador2 += direccionMovimiento;
   }
   
-  
-  
   fill("rgb(24,255,167)");
   rect(xJugador1, yJugador1,anchoJugador, alturaJugador)
   
@@ -54,60 +50,33 @@ function draw() {
   rect(xJugador2, yJugador2,anchoJugador, alturaJugador)
   
   fill("white");
-  circle(pelota.x, pelota.y, pelota.tamano);
-  console.log(pelota.diametro)
+  circle(pelota.x+=pelota.velocidadX*pelota.direccionX, pelota.y+=pelota.velocidadY*pelota.direccionY, pelota.tamano);
   
-  //Controla el movimiento de arriba hacia abajo
-  if(rebote_y_bandera == false) {
-    pelota.y += direccionMovimiento;
-    
-    if(primer_rebote){
-       pelota.x += pelota_rebote
-        
-    }
-    if(pelota.y >= largo_canvas - pelota.diametro){
-    rebote_y_bandera = true;
-    pelota_rebote = obtener_numero_random()
-    }
+  //Valida colision con el canvas
+  if(pelota.y + pelota.radio >= largo_canvas){
+     pelota.direccionY = -pelota.direccionY;
+  }
+  if(pelota.y <= 0){
+     pelota.direccionY = -pelota.direccionY;
   }
   
-  //Controla el movimiento vertical de abajo hacia arriba
-    if(rebote_y_bandera){
-      pelota.x += pelota_rebote;
-      pelota.y -=direccionMovimiento;
-      if(pelota.y <= pelota.diametro){
-        rebote_y_bandera = false;
-        primer_rebote = true;
-      }
-      
-    }
-  
-  //Controla el movimiento de derecha a izquierda
-  if(pelota.x <= pelota.diametro){
-        if(pelota_rebote == -direccionMovimiento){
-          pelota_rebote = direccionMovimiento;
-        }
-    }
-  
-  //Controla el movimiento de izquierda a derecha
-  if(pelota.x >= ancho_canvas - pelota.diametro){
-        if(pelota_rebote == direccionMovimiento){
-          pelota_rebote = -direccionMovimiento;
-        }
-    }
-  
-  
-  
-}
-  
-
-function obtener_numero_random(){
-  let x_random = 0;
-  let numero_random = Math.floor(Math.random() * (2 - 1 + 1)) + 1;
-  if(numero_random == 1){
-    x_random = 3;
-  }else{
-    x_random = -3;
+  //Colision jugador 1
+  if(pelota.x - pelota.radio <= xJugador1 + anchoJugador && 
+      pelota.x > xJugador1 &&
+      pelota.y >= yJugador1 &&
+      pelota.y <= yJugador1 + alturaJugador){
+    pelota.direccionX = -pelota.direccionX;
+    pelota.velocidadX += 0.5;
+    pelota.velocidadY += 0.5;
   }
-  return x_random;
+  
+  //Colision jugador 2
+  if(pelota.x + tamano_pelota / 2 >= xJugador2 &&
+      pelota.x < xJugador2 + anchoJugador &&
+      pelota.y >= yJugador2 &&
+      pelota.y <= yJugador2 + alturaJugador) {
+    pelota.direccionX = -pelota.direccionX;
+    pelota.velocidadX += 0.5;
+    pelota.velocidadY += 0.5;
+  }
 }
