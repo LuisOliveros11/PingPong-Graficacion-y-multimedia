@@ -13,6 +13,7 @@ let tamano_pelota = 20;
 let marcadorJugador1 = 0;
 let marcadorJugador2 = 0;
 
+let juego_terminado = false;
 
 let pelota = {
     x: 400,
@@ -28,11 +29,13 @@ let pelota = {
 function setup() {
   createCanvas(ancho_canvas, largo_canvas);
   pelota.direccionX = obtener_numero_random();
+  
 }
 
 function draw() {
   background("black");
   
+  textSize(16);
   text('Jugador 1: ' + marcadorJugador1, 300, 50);
   text('Jugador 2: ' + marcadorJugador2, 400, 50);
   
@@ -94,6 +97,7 @@ function draw() {
     marcadorJugador2++;
     pelota.x = 400;
     pelota.y = 250;
+    pelota.direccionX = obtener_numero_random();
     pelota.velocidadX = 1;
     pelota.velocidadY = 3;
   }
@@ -102,8 +106,33 @@ function draw() {
     marcadorJugador1++;
     pelota.x = 400;
     pelota.y = 250;
+    pelota.direccionX = obtener_numero_random();
     pelota.velocidadX = 1;
     pelota.velocidadY = 3;
+  }
+  
+    if (marcadorJugador1 >= 10) {
+    textSize(32);
+    fill("white");
+    background("black"); 
+    text("¡Jugador 1 Gana!", 300, 250);
+    textSize(22);
+    text("Presiona Enter para volver a jugar", 252, 330);
+    noLoop();
+    juego_terminado = true
+
+  }
+
+  if (marcadorJugador2 >= 10) {
+   
+    textSize(32);
+    fill("white");
+    background("black"); 
+    text("¡Jugador 2 Gana!", 300, 250);
+    textSize(22);
+    text("Presiona Enter para volver a jugar", 252, 330);
+    noLoop(); 
+    juego_terminado = true;
   }
 
 }
@@ -116,4 +145,32 @@ function obtener_numero_random() {
   } else {
     return -1; 
   }
+}
+
+function keyPressed() {
+  if (keyCode === 13 && juego_terminado) {
+    reiniciar_juego();
+  }
+}
+
+
+function reiniciar_juego() {
+  
+   //Reiniciar variables
+    marcadorJugador1 = 0;
+    marcadorJugador2 = 0;
+    pelota.x = 400;
+    pelota.y = 250;
+    pelota.velocidadX = 1;
+    pelota.velocidadY = 3;
+    pelota.direccionX = obtener_numero_random();
+    pelota.direccionY = 1;
+    
+    //Reiniciar posiciones de los jugadores
+    yJugador1 = 215;
+    yJugador2 = 215;
+    
+    //Volver a iniciar el ciclo
+    loop();
+    juego_terminado = false;
 }
