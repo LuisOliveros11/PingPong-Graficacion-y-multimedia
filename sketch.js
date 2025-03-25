@@ -10,6 +10,8 @@ let yJugador2 = 215;
 let direccionMovimiento = 3;
 
 let tamano_pelota = 20;
+let marcadorJugador1 = 0;
+let marcadorJugador2 = 0;
 
 
 let pelota = {
@@ -30,6 +32,9 @@ function setup() {
 
 function draw() {
   background("black");
+  
+  text('Jugador 1: ' + marcadorJugador1, 300, 50);
+  text('Jugador 2: ' + marcadorJugador2, 400, 50);
   
   if(keyIsDown(87) && yJugador1 > 0) {
     yJugador1 += -direccionMovimiento;
@@ -56,9 +61,13 @@ function draw() {
   //Valida colision con el canvas
   if(pelota.y + pelota.radio >= largo_canvas){
      pelota.direccionY = -pelota.direccionY;
+     pelota.velocidadX += 0.5;
+     pelota.velocidadY += 0.5;
   }
   if(pelota.y <= 0){
      pelota.direccionY = -pelota.direccionY;
+     pelota.velocidadX += 0.5;
+     pelota.velocidadY += 0.5;
   }
   
   //Colision jugador 1
@@ -80,6 +89,23 @@ function draw() {
     pelota.velocidadX += 0.5;
     pelota.velocidadY += 0.5;
   }
+
+  if(pelota.x <= 10){
+    marcadorJugador2++;
+    pelota.x = 400;
+    pelota.y = 250;
+    pelota.velocidadX = 1;
+    pelota.velocidadY = 3;
+  }
+  
+  if(pelota.x >= 790){
+    marcadorJugador1++;
+    pelota.x = 400;
+    pelota.y = 250;
+    pelota.velocidadX = 1;
+    pelota.velocidadY = 3;
+  }
+
 }
 
 //Función que determinará en qué dirección se moverá la pelota al iniciar el juego
